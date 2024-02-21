@@ -1,1 +1,1 @@
-welcome to gito
+welcome to git

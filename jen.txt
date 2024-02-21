@@ -1,4 +1,3 @@
-currentBuild.displayName = "deploy-file-#"+currentBuild.number
 pipeline {
     agent any
     stages {

@@ -4,8 +4,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout source code from version control
-                bat "git clone https://github.com/PandiriMounika2001/gcp.git"
-                bat "mvn clean -f gcp"
+                sh "git clone https://github.com/PandiriMounika2001/gcp.git"
+                sh "mvn clean -f gcp"
             }
         }
         
@@ -18,14 +18,14 @@ pipeline {
         
         stage('Test') {
             steps {
-               bat "mvn instal -f gcp"
+               sh "mvn instal -f gcp"
                
             }
         }
         
         stage('package') {
             steps {
-                bat "mvn install -f gcp" 
+                sh "mvn install -f gcp" 
             }
         }
     }

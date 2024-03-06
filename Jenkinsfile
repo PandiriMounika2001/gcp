@@ -1,11 +1,11 @@
 pipeline {
     agent any
-    
     stages {
         stage('Checkout') {
             steps {
                 // Checkout source code from version control
-                git 'https://github.com/your/repository.git'
+                bat "git clone https://github.com/PandiriMounika2001/gcp.git"
+                bat "mvn clean -f gcp"
             }
         }
         
@@ -18,30 +18,16 @@ pipeline {
         
         stage('Test') {
             steps {
-                // Run tests using Maven
-                sh 'mvn test'
+               bat "mvn instal -f gcp"
+               
             }
         }
         
-        stage('Deploy') {
+        stage('package') {
             steps {
-                // Deploy the artifact (assuming it's a JAR file) to a remote server
-                // Example: scp target/your-project.jar user@remote-server:/path/to/destination
-                echo 'Deployment step goes here'
+                bat "mvn install -f gcp" 
             }
         }
     }
     
-    post {
-        success {
-            // Actions to perform when the pipeline succeeds
-            echo "Pipeline succeeded! Your Java application is ready for deployment."
-        }
-        failure {
-            // Actions to perform when the pipeline fails
-            echo "Pipeline failed! Please check the build logs for errors."
-        }
-    }
-}
-
-
+   

@@ -1,22 +1,16 @@
 pipeline {
     agent any
-    stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/PandiriMounika2001/gcp'
-            }
-        }
-        stage('Build') {
-            steps {
-               echo "building"
-            }
-        }
-        stage('Test') {
-            steps {
-                echo "testing"
-            }
-        }
+    stage('Checkout') {
+        git branch: 'main', url: 'https://github.com/PandiriMounika2001/gcp.git'
+    }
+    stage('Build') {
+      echo "building"
+    }
+    stage('Test') {
+        echo "testing"
     }
 }
+    
+
 
       

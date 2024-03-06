@@ -3,7 +3,8 @@ node{
     git 'https://github.com/PandiriMounika2001/gcp'
   }
   stage('compile-package'){
-    def mvnHOME=tool name: 'maven', type: 'maven'
+       //get maven home path
+    def mvnHOME = tool name: 'maven', type: 'maven'
     sh "${mvnHOME}/bin/mvn package"
   }
 }

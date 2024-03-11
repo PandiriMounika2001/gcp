@@ -1,3 +1,5 @@
-FROM tomcat:8.0.20-jre8
-copy target/*.war /usr/local/tomacat/webapps/maven-web-app.war
-Expose 8080
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install nginx -y
+Expose 80
+CMD ["nginx","-g","daemon off;"]

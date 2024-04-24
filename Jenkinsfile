@@ -1,75 +1,33 @@
 pipeline {
     agent any
- 
-    environment {
-        JAVA_HOME = "/usr/lib/jvm/java-11-openjdk-amd64"
-        MAVEN_HOME = "/usr/share/maven"
+    parameters {
+        choice(name: 'VERSION',choices: ['1.1.0', '1.2.0','1.3.0'], description: '')
+        booleanparam(name: 'executeTests', defaultvalue:true, description: '')
     }
- 
     stages {
-        stage('Checkout SCM') {
+        stage("build") {
             steps {
-                script {
-                    git credentialsId: '2239466d-ce75-41c1-ab88-537d24881ecc', url: 'https://github.com/PandiriMounika2001/gcp'
-                    sh 'git branch -r | awk \'{print $1}\' ORS=\'\\n\' >>branch.txt'
+                echo 'building the application...'
+            }
+        }
+        stage("test") {
+            when {
+                expression {
+                    params.executeTests
                 }
             }
-        }
- 
-        stage('Choose Branch') {
             steps {
-                script {
-                    def branches = readFile('branch.txt')
-                    env.BRANCH_NAME = input message: 'Please choose the branch to build',
-                                            ok: 'Validate!',
-                                            parameters: [choice(name: 'Branch', choices: branches, description: 'Branch to build')]
-                }
+                echo 'testing the application...'
             }
         }
- 
-        stage('Checkout') {
+        stage("deploy") {
             steps {
-                echo 'Checking out the code...'
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: "refs/heads/${env.BRANCH_NAME}"]],
-                    userRemoteConfigs: [[
-                        url: 'https://github.com/PandiriMounika2001/gcp',
-                        credentialsId: '2239466d-ce75-41c1-ab88-537d24881ecc'
-                    ]]
-                ])
-            }
-        }
- 
-        stage('Build and Test') {
-            steps {
-                echo "Building and testing the project..."
-                sh "${MAVEN_HOME}/bin/mvn clean install"
-                sh "${MAVEN_HOME}/bin/mvn test"
-            }
-        }
- 
-        stage('Deploy') {
-            steps {
-                echo "Deploying the project..."
-                sh "${MAVEN_HOME}/bin/mvn deploy"
+                echo 'deploying the application...'
+                echo "deploying version ${params.VERSION}"
             }
         }
     }
- 
-    post {
-        always {
-            junit 'target/surefire-reports/**/*.xml'
-            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-        }
- 
-        success {
-            echo 'Pipeline completed successfully!'
-        }
- 
-        failure {
-            echo 'Pipeline failed.'
-        }
-    }
+}
+
 
   
